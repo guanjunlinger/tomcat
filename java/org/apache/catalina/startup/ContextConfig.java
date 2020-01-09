@@ -1075,6 +1075,7 @@ public class ContextConfig implements LifecycleListener {
      * where there is duplicate configuration, the most specific level wins. ie
      * an application's web.xml takes precedence over the host level or global
      * web.xml file.
+     * 解析web.xml配置文件
      */
     protected void webConfig() {
         /*
