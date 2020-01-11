@@ -54,7 +54,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
     private static final Log log = LogFactory.getLog(AsyncContextImpl.class);
 
     protected static final StringManager sm =
-        StringManager.getManager(Constants.Package);
+            StringManager.getManager(Constants.Package);
 
     /* When a request uses a sequence of multiple start(); dispatch() with
      * non-container threads it is possible for a previous dispatch() to
@@ -104,6 +104,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         try {
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
+                    //触发AsyncListener.onComplete回调
                     listener.fireOnComplete(event);
                 } catch (Throwable t) {
                     ExceptionUtils.handleThrowable(t);
@@ -181,6 +182,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         dispatch(getRequest().getServletContext(), path);
     }
 
+    //设置AsyncStateMachine的state为MUST_DISPATCH
     @Override
     public void dispatch(ServletContext servletContext, String path) {
         synchronized (asyncContextLock) {
@@ -192,7 +194,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
                 throw new IllegalStateException(
                         sm.getString("asyncContextImpl.dispatchingStarted"));
             }
-            if (request.getAttribute(ASYNC_REQUEST_URI)==null) {
+            if (request.getAttribute(ASYNC_REQUEST_URI) == null) {
                 request.setAttribute(ASYNC_REQUEST_URI, request.getRequestURI());
                 request.setAttribute(ASYNC_CONTEXT_PATH, request.getContextPath());
                 request.setAttribute(ASYNC_SERVLET_PATH, request.getServletPath());
@@ -213,6 +215,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             // request/response and that in turn may trigger recycling of this
             // object before the in-progress count can be decremented
             final Context context = this.context;
+            //AsyncRunnable封装分派逻辑
             this.dispatch = new AsyncRunnable(
                     request, applicationDispatcher, servletRequest, servletResponse);
             this.request.getCoyoteRequest().action(ActionCode.ASYNC_DISPATCH, null);
@@ -261,7 +264,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
 
     @Override
     public void addListener(AsyncListener listener, ServletRequest servletRequest,
-            ServletResponse servletResponse) {
+                            ServletResponse servletResponse) {
         check();
         AsyncListenerWrapper wrapper = new AsyncListenerWrapper();
         wrapper.setListener(listener);
@@ -277,8 +280,8 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         check();
         T listener = null;
         try {
-             listener = (T) context.getInstanceManager().newInstance(
-                     clazz.getName(), clazz.getClassLoader());
+            listener = (T) context.getInstanceManager().newInstance(
+                    clazz.getName(), clazz.getClassLoader());
         } catch (ReflectiveOperationException | NamingException e) {
             ServletException se = new ServletException(e);
             throw se;
@@ -316,8 +319,9 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         return result.get();
     }
 
+    //设置AsyncStateMachine的state为STARTING
     public void setStarted(Context context, ServletRequest request,
-            ServletResponse response, boolean originalRequestResponse) {
+                           ServletResponse response, boolean originalRequestResponse) {
 
         synchronized (asyncContextLock) {
             this.request.getCoyoteRequest().action(
@@ -338,6 +342,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             }
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
+                    //触发AsyncListener.onStartAsync回调
                     listener.fireOnStartAsync(event);
                 } catch (Throwable t) {
                     ExceptionUtils.handleThrowable(t);
@@ -363,15 +368,16 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             dispatch = null;
             runnable.run();
             if (!request.isAsync()) {
+                //如果分派到非异步请求,则直接触发异步请求完成回调
                 fireOnComplete();
             }
         } catch (RuntimeException x) {
             // doInternalComplete(true);
             if (x.getCause() instanceof ServletException) {
-                throw (ServletException)x.getCause();
+                throw (ServletException) x.getCause();
             }
             if (x.getCause() instanceof IOException) {
-                throw (IOException)x.getCause();
+                throw (IOException) x.getCause();
             }
             throw new ServletException(x);
         }
@@ -394,7 +400,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
     }
 
 
-
     @Override
     public boolean isAvailable() {
         Context context = this.context;
@@ -406,7 +411,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
 
 
     public void setErrorState(Throwable t, boolean fireOnError) {
-        if (t!=null) request.setAttribute(RequestDispatcher.ERROR_EXCEPTION, t);
+        if (t != null) request.setAttribute(RequestDispatcher.ERROR_EXCEPTION, t);
         request.getCoyoteRequest().action(ActionCode.ASYNC_ERROR, null);
 
         if (fireOnError) {
@@ -419,6 +424,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             listenersCopy.addAll(listeners);
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
+                    //触发AsyncListener.onError回调
                     listener.fireOnError(errorEvent);
                 } catch (Throwable t2) {
                     ExceptionUtils.handleThrowable(t2);
@@ -504,7 +510,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         }
         String msg = String.format(
                 "Req: %1$8s  CReq: %2$8s  RP: %3$8s  Stage: %4$s  " +
-                "Thread: %5$20s  State: %6$20s  Method: %7$11s  URI: %8$s",
+                        "Thread: %5$20s  State: %6$20s  Method: %7$11s  URI: %8$s",
                 rHashCode, crHashCode, rpHashCode, stage,
                 threadName, "N/A", method, uri);
         if (log.isTraceEnabled()) {
@@ -533,7 +539,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         private final org.apache.coyote.Request coyoteRequest;
 
         public RunnableWrapper(Runnable wrapped, Context ctxt,
-                org.apache.coyote.Request coyoteRequest) {
+                               org.apache.coyote.Request coyoteRequest) {
             this.wrapped = wrapped;
             this.context = ctxt;
             this.coyoteRequest = coyoteRequest;
@@ -571,7 +577,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         private final ServletResponse servletResponse;
 
         public AsyncRunnable(Request request, AsyncDispatcher applicationDispatcher,
-                ServletRequest servletRequest, ServletResponse servletResponse) {
+                             ServletRequest servletRequest, ServletResponse servletResponse) {
             this.request = request;
             this.applicationDispatcher = applicationDispatcher;
             this.servletRequest = servletRequest;
