@@ -201,7 +201,7 @@ public class CoyoteInputStream extends ServletInputStream {
         return ib.isReady();
     }
 
-
+    //配置non-blocking IO 读操作回调
     @Override
     public void setReadListener(ReadListener listener) {
         ib.setReadListener(listener);
