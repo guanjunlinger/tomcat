@@ -299,7 +299,7 @@ public class CoyoteAdapter implements Adapter {
     @Override
     public void service(org.apache.coyote.Request req, org.apache.coyote.Response res)
             throws Exception {
-
+        //Adapter将请求适配到HttpServletRequest,响应适配到HttpServletResponse
         Request request = (Request) req.getNote(ADAPTER_NOTES);
         Response response = (Response) res.getNote(ADAPTER_NOTES);
 
@@ -343,6 +343,7 @@ public class CoyoteAdapter implements Adapter {
                 connector.getService().getContainer().getPipeline().getFirst().invoke(
                         request, response);
             }
+            //如果当前请求开启异步
             if (request.isAsync()) {
                 async = true;
                 ReadListener readListener = req.getReadListener();
@@ -352,6 +353,7 @@ public class CoyoteAdapter implements Adapter {
                     ClassLoader oldCL = null;
                     try {
                         oldCL = request.getContext().bind(false, null);
+                        //触发ReadListener.onAllDataRead回调
                         if (req.sendAllDataReadEvent()) {
                             req.getReadListener().onAllDataRead();
                         }

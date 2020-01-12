@@ -132,7 +132,7 @@ final class StandardWrapperValve
         // Allocate a servlet instance to process this request
         try {
             if (!unavailable) {
-                //StandardWrapper负责管理Servlet的生命周期,特殊处理实现SingleThreadModel的Servlet
+                //StandardWrapper负责管理Servlet的生命周期,特殊处理实现SingleThreadModel接口的Servlet
                 servlet = wrapper.allocate();
             }
         } catch (UnavailableException e) {
