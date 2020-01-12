@@ -1093,6 +1093,7 @@ public abstract class AbstractEndpoint<S,U> {
                 sc.reset(socketWrapper, event);
             }
             Executor executor = getExecutor();
+            //
             if (dispatch && executor != null) {
                 executor.execute(sc);
             } else {

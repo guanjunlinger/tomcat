@@ -132,6 +132,7 @@ final class StandardWrapperValve
         // Allocate a servlet instance to process this request
         try {
             if (!unavailable) {
+                //StandardWrapper负责管理Servlet的生命周期,特殊处理实现SingleThreadModel的Servlet
                 servlet = wrapper.allocate();
             }
         } catch (UnavailableException e) {
@@ -196,9 +197,10 @@ final class StandardWrapperValve
                     }
                 } else {
                     if (request.isAsyncDispatching()) {
-
+                        //处理AsyncContext的dispatch任务
                         request.getAsyncContextInternal().doInternalDispatch();
                     } else {
+                        //过滤器责任链模式
                         filterChain.doFilter
                             (request.getRequest(), response.getResponse());
                     }
@@ -265,6 +267,7 @@ final class StandardWrapperValve
             // Deallocate the allocated servlet instance
             try {
                 if (servlet != null) {
+                    //回收Servlet实例
                     wrapper.deallocate(servlet);
                 }
             } catch (Throwable e) {
