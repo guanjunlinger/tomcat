@@ -1060,7 +1060,7 @@ public class StandardWrapper extends ContainerBase
                 throw new ServletException
                     (sm.getString("standardWrapper.instantiate", servletClass), e);
             }
-
+            //解析Servlet类的@MultipartConfig注解信息
             if (multipartConfigElement == null) {
                 MultipartConfig annotation =
                         servlet.getClass().getAnnotation(MultipartConfig.class);
@@ -1085,7 +1085,7 @@ public class StandardWrapper extends ContainerBase
                 }
                 singleThreadModel = true;
             }
-
+            //Servlet.init回调
             initServlet(servlet);
 
             fireContainerEvent("load", this);

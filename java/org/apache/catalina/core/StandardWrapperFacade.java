@@ -27,7 +27,7 @@ import javax.servlet.ServletContext;
 
 /**
  * Facade for the <b>StandardWrapper</b> object.
- *
+ * 门面模式,隐藏StandardWrapper内部的实现细节
  * @author Remy Maucherat
  */
 public final class StandardWrapperFacade
