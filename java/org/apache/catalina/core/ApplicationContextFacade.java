@@ -141,6 +141,7 @@ public class ApplicationContextFacade implements ServletContext {
         } else {
             theContext = context.getContext(uripath);
         }
+        //返回ApplicationContextFacade隐藏内部系统的复杂性
         if ((theContext != null) &&
             (theContext instanceof ApplicationContext)){
             theContext = ((ApplicationContext)theContext).getFacade();
