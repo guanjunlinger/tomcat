@@ -357,6 +357,7 @@ final class ApplicationDispatcher implements AsyncDispatcher, RequestDispatcher 
 
             ApplicationHttpRequest wrequest = (ApplicationHttpRequest) wrapRequest(state);
             HttpServletRequest hrequest = state.hrequest;
+            //保留forward前的Servlet信息
             if (hrequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI) == null) {
                 wrequest.setAttribute(RequestDispatcher.FORWARD_REQUEST_URI,
                                       hrequest.getRequestURI());
@@ -442,7 +443,7 @@ final class ApplicationDispatcher implements AsyncDispatcher, RequestDispatcher 
         DispatcherType disInt = (DispatcherType) request.getAttribute(Globals.DISPATCHER_TYPE_ATTR);
         if (disInt != null) {
             boolean doInvoke = true;
-
+            //forward请求触发ServletRequestListener监听器
             if (context.getFireRequestListenersOnForwards() &&
                     !context.fireRequestInitEvent(request)) {
                 doInvoke = false;
@@ -551,6 +552,7 @@ final class ApplicationDispatcher implements AsyncDispatcher, RequestDispatcher 
 
             ApplicationHttpRequest wrequest =
                 (ApplicationHttpRequest) wrapRequest(state);
+            //保留include之前的Servlet信息
             String contextPath = context.getPath();
             if (requestURI != null)
                 wrequest.setAttribute(RequestDispatcher.INCLUDE_REQUEST_URI,
