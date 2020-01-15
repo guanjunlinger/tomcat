@@ -104,7 +104,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         try {
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
-                    //触发AsyncListener.onComplete回调
                     listener.fireOnComplete(event);
                 } catch (Throwable t) {
                     ExceptionUtils.handleThrowable(t);
@@ -182,7 +181,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         dispatch(getRequest().getServletContext(), path);
     }
 
-    //设置AsyncStateMachine的state为MUST_DISPATCH
     @Override
     public void dispatch(ServletContext servletContext, String path) {
         synchronized (asyncContextLock) {
@@ -319,7 +317,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         return result.get();
     }
 
-    //设置AsyncStateMachine的state为STARTING
     public void setStarted(Context context, ServletRequest request,
                            ServletResponse response, boolean originalRequestResponse) {
 
@@ -342,7 +339,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             }
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
-                    //触发AsyncListener.onStartAsync回调
                     listener.fireOnStartAsync(event);
                 } catch (Throwable t) {
                     ExceptionUtils.handleThrowable(t);
@@ -368,7 +364,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             dispatch = null;
             runnable.run();
             if (!request.isAsync()) {
-                //如果分派到非异步请求,则直接触发异步请求完成回调
                 fireOnComplete();
             }
         } catch (RuntimeException x) {
@@ -424,7 +419,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             listenersCopy.addAll(listeners);
             for (AsyncListenerWrapper listener : listenersCopy) {
                 try {
-                    //触发AsyncListener.onError回调
                     listener.fireOnError(errorEvent);
                 } catch (Throwable t2) {
                     ExceptionUtils.handleThrowable(t2);
@@ -553,6 +547,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             } catch (Throwable t) {
                 ExceptionUtils.handleThrowable(t);
                 context.getLogger().error(sm.getString("asyncContextImpl.asyncRunnableError"), t);
+                //记录异步请求的错误信息
                 coyoteRequest.setAttribute(RequestDispatcher.ERROR_EXCEPTION, t);
                 org.apache.coyote.Response coyoteResponse = coyoteRequest.getResponse();
                 coyoteResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
