@@ -139,7 +139,7 @@ import org.apache.tomcat.util.security.PrivilegedSetTccl;
  * Standard implementation of the <b>Context</b> interface.  Each
  * child container must be a Wrapper implementation to process the
  * requests directed to a particular servlet.
- *
+ *  1.
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */
@@ -4669,6 +4669,7 @@ public class StandardContext extends ContainerBase
         ServletContextEvent event = new ServletContextEvent(getServletContext());
         ServletContextEvent tldEvent = null;
         if (noPluggabilityListeners.size() > 0) {
+            //门面模式,禁止注册Servlet组件
             noPluggabilityServletContext = new NoPluggabilityServletContext(getServletContext());
             tldEvent = new ServletContextEvent(noPluggabilityServletContext);
         }
@@ -5129,6 +5130,7 @@ public class StandardContext extends ContainerBase
             mergeParameters();
 
             // Call ServletContainerInitializers
+            //利用ServletContainerInitializer SPI 配置基础设施
             for (Map.Entry<ServletContainerInitializer, Set<Class<?>>> entry :
                 initializers.entrySet()) {
                 try {
