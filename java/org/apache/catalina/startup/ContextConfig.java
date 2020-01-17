@@ -774,7 +774,6 @@ public class ContextConfig implements LifecycleListener {
         }
 
         webConfig();
-
         if (!context.getIgnoreAnnotations()) {
             applicationAnnotationsConfig();
         }
@@ -1075,7 +1074,7 @@ public class ContextConfig implements LifecycleListener {
      * where there is duplicate configuration, the most specific level wins. ie
      * an application's web.xml takes precedence over the host level or global
      * web.xml file.
-     * 解析web.xml配置文件
+     *
      */
     protected void webConfig() {
         /*
@@ -1137,9 +1136,10 @@ public class ContextConfig implements LifecycleListener {
 
         // Step 3. Look for ServletContainerInitializer implementations
         if (ok) {
+            //加载并且实例化jar包的ServletContainerInitializer
             processServletContainerInitializers();
         }
-
+        //ServletContainerInitializer配置忽略metadata-complete属性
         if  (!webXml.isMetadataComplete() || typeInitializerMap.size() > 0) {
             // Steps 4 & 5.
             processClasses(webXml, orderedFragments);
@@ -2126,7 +2126,7 @@ public class ContextConfig implements LifecycleListener {
         if (handlesTypesOnly) {
             return;
         }
-
+        //@HandlesTypes value包含注解配置的Servlet组件
         processClass(fragment, clazz);
     }
 

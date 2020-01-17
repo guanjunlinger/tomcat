@@ -199,7 +199,6 @@ final class StandardWrapperValve
                         //处理AsyncContext的dispatch任务
                         request.getAsyncContextInternal().doInternalDispatch();
                     } else {
-                        //过滤器责任链模式
                         filterChain.doFilter
                             (request.getRequest(), response.getResponse());
                     }
