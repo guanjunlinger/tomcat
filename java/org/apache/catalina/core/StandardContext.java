@@ -139,7 +139,12 @@ import org.apache.tomcat.util.security.PrivilegedSetTccl;
  * Standard implementation of the <b>Context</b> interface.  Each
  * child container must be a Wrapper implementation to process the
  * requests directed to a particular servlet.
- *  1.
+ *  1.Tomcat内部web应用执行环境
+ *  2.维护和管理Servlet集合
+ *  3.维护和管理Filter集合
+ *  4.维护和管理applicationLifecycleListeners(HttpSessionListener和ServletContextListener接口)
+ *  5.维护和管理applicationEventListeners
+ *
  * @author Craig R. McClanahan
  * @author Remy Maucherat
  */
@@ -4842,7 +4847,7 @@ public class StandardContext extends ContainerBase
     /**
      * Load and initialize all servlets marked "load on startup" in the
      * web application deployment descriptor.
-     *
+     * loadOnStartup值越小,优先级优先级(取值必须>=0)
      * @param children Array of wrappers for all currently defined
      *  servlets (including those not declared load on startup)
      * @return <code>true</code> if load on startup was considered successful
@@ -4869,6 +4874,7 @@ public class StandardContext extends ContainerBase
         for (ArrayList<Wrapper> list : map.values()) {
             for (Wrapper wrapper : list) {
                 try {
+                    //加载并初始化Servlet实例
                     wrapper.load();
                 } catch (ServletException e) {
                     getLogger().error(sm.getString("standardContext.loadOnStartup.loadException",
