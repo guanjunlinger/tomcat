@@ -1664,7 +1664,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                     SocketState state = SocketState.OPEN;
                     // Process the request from this socket
                     if (event == null) {
-                        //将请求交给ConnectionHandler处理
                         state = getHandler().process(socketWrapper, SocketEvent.OPEN_READ);
                     } else {
                         state = getHandler().process(socketWrapper, event);

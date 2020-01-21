@@ -317,6 +317,10 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
         return result.get();
     }
 
+    /** 设置AsyncStateMachine的状态为STARTING
+     *  为AsyncStateMachine设置AsyncContextCallback回调
+     *  封装AsyncEvent,为后续AsyncListener回调准备
+     */
     public void setStarted(Context context, ServletRequest request,
                            ServletResponse response, boolean originalRequestResponse) {
 

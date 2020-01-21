@@ -1686,7 +1686,6 @@ public class Request implements HttpServletRequest {
         if (asyncContext == null) {
             asyncContext = new AsyncContextImpl(this);
         }
-
         asyncContext.setStarted(getContext(), request, response,
                 request==getRequest() && response==getResponse().getResponse());
         asyncContext.setTimeout(getConnector().getAsyncTimeout());
