@@ -284,8 +284,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                 nioChannels = new SynchronizedStack<>(SynchronizedStack.DEFAULT_SIZE,
                         socketProperties.getBufferPool());
             }
-
-            //请求分派和响应线程池
             if (getExecutor() == null) {
                 createExecutor();
             }
@@ -298,7 +296,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             pollerThread.setPriority(threadPriority);
             pollerThread.setDaemon(true);
             pollerThread.start();
-            //单独的Acceptor线程接受客户端连接
+            //单独的Acceptor线程接受客户端连接,
             startAcceptorThread();
         }
     }
@@ -724,7 +722,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
                 try {
                     if (!close) {
-                        //优先处理剩余的PollerEvent,允许事件对象回收复用
                         hasEvents = events();
                         if (wakeupCounter.getAndSet(-1) > 0) {
                             // If we are here, means we have other stuff to do
@@ -779,7 +776,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             getStopLatch().countDown();
         }
 
-        //IO事件分派器
+        //事件分派器
         protected void processKey(SelectionKey sk, NioSocketWrapper socketWrapper) {
             try {
                 if (close) {
@@ -789,7 +786,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                         if (socketWrapper.getSendfileData() != null) {
                             processSendfile(sk, socketWrapper, false);
                         } else {
-                            //清除Socket的事件标志位,防止多线程重复处理
                             unreg(sk, socketWrapper, sk.readyOps());
                             boolean closeSocket = false;
                             // Read goes before write
@@ -799,7 +795,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                                         closeSocket = true;
                                     }
 
-                                     //创建SocketProcessor任务,提交内部线程池处理
                                 } else if (!processSocket(socketWrapper, SocketEvent.OPEN_READ, true)) {
                                     closeSocket = true;
                                 }

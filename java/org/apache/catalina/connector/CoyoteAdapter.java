@@ -349,7 +349,6 @@ public class CoyoteAdapter implements Adapter {
                 if (readListener != null && request.isFinished()) {
                     // Possible the all data may have been read during service()
                     // method so this needs to be checked here
-                    //Servlet的service Method已经读完请求体,触发非阻塞IO回调
                     ClassLoader oldCL = null;
                     try {
                         oldCL = request.getContext().bind(false, null);

@@ -582,7 +582,6 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
             getLog().info(sm.getString("abstractProtocolHandler.start", getName()));
             logPortOffset();
         }
-
         endpoint.start();
         monitorFuture = getUtilityExecutor().scheduleWithFixedDelay(
                 new Runnable() {
