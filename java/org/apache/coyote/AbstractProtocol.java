@@ -583,6 +583,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
             logPortOffset();
         }
         endpoint.start();
+        //周期性启动异步请求超时检测任务,防止任务异常终止
         monitorFuture = getUtilityExecutor().scheduleWithFixedDelay(
                 new Runnable() {
                     @Override
@@ -610,6 +611,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     getLog().error(sm.getString("abstractProtocolHandler.asyncTimeoutError"), e);
                 }
             }
+            //周期性的执行异步请求超时检测回调
             timeoutFuture = getUtilityExecutor().scheduleAtFixedRate(
                     new Runnable() {
                         @Override
