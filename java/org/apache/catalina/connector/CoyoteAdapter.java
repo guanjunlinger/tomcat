@@ -150,7 +150,6 @@ public class CoyoteAdapter implements Adapter {
             }
 
             if (status == SocketEvent.TIMEOUT) {
-                //触发超时回调
                 if (!asyncConImpl.timeout()) {
                     asyncConImpl.setErrorState(null, false);
                 }

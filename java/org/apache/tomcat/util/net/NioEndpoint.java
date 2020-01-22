@@ -292,13 +292,13 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
             initializeConnectionLatch();
 
-            //Poller线程负责处理IO事件和管理IO多路复用器
+            //Poller线程负责IO事件分派
             poller = new Poller();
             Thread pollerThread = new Thread(poller, getName() + "-ClientPoller");
             pollerThread.setPriority(threadPriority);
             pollerThread.setDaemon(true);
             pollerThread.start();
-            //Acceptor线程接受客户端连接,
+            //Acceptor线程接受客户端连接
             startAcceptorThread();
         }
     }
