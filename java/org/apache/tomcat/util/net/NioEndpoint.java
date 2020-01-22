@@ -1665,6 +1665,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                     if (event == null) {
                         state = getHandler().process(socketWrapper, SocketEvent.OPEN_READ);
                     } else {
+                        //处理客户端发送的Socket消息
                         state = getHandler().process(socketWrapper, event);
                     }
                     if (state == SocketState.CLOSED) {
@@ -1690,6 +1691,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                 event = null;
                 //return to cache
                 if (running && !paused && processorCache != null) {
+                    //回收SocketProcessor对象
                     processorCache.push(this);
                 }
             }
