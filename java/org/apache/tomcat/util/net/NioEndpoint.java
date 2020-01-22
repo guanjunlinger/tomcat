@@ -292,7 +292,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
             initializeConnectionLatch();
 
-            //Poller线程负责IO事件分派
+            //Poller线程负责IO事件分派和IO通道注册
             poller = new Poller();
             Thread pollerThread = new Thread(poller, getName() + "-ClientPoller");
             pollerThread.setPriority(threadPriority);
@@ -781,7 +781,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             getStopLatch().countDown();
         }
 
-        //事件分派器
         protected void processKey(SelectionKey sk, NioSocketWrapper socketWrapper) {
             try {
                 if (close) {
@@ -799,7 +798,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                                     if (!socketWrapper.readOperation.process()) {
                                         closeSocket = true;
                                     }
-
+                                   //worker线程处理IO事件
                                 } else if (!processSocket(socketWrapper, SocketEvent.OPEN_READ, true)) {
                                     closeSocket = true;
                                 }
