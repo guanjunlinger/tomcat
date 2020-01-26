@@ -796,7 +796,6 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 // longer a processor associated with this socket.
                 return SocketState.CLOSED;
             }
-
             ContainerThreadMarker.set();
 
             try {

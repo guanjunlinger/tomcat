@@ -4847,7 +4847,7 @@ public class StandardContext extends ContainerBase
     /**
      * Load and initialize all servlets marked "load on startup" in the
      * web application deployment descriptor.
-     * loadOnStartup值越小,优先级优先级(取值必须>=0)
+     * loadOnStartup值越小,优先级越高(取值必须>=0)
      * @param children Array of wrappers for all currently defined
      *  servlets (including those not declared load on startup)
      * @return <code>true</code> if load on startup was considered successful

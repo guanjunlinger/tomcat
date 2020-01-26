@@ -181,7 +181,6 @@ public abstract class AbstractEndpoint<S,U> {
 
     /**
      * Cache for SocketProcessor objects
-     * 对象池技术复用SocketProcessor
      */
     protected SynchronizedStack<SocketProcessorBase<S>> processorCache;
 

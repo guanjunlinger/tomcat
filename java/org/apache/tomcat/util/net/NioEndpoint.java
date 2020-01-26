@@ -97,13 +97,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
     /**
      * Cache for poller events
-     * 对象池技术复用PollerEvent对象
      */
     private SynchronizedStack<PollerEvent> eventCache;
 
     /**
      * Bytebuffer cache, each channel holds a set of buffers (two, except for SSL holds four)
-     * 对象池技术复用NioChannel对象
      */
     private SynchronizedStack<NioChannel> nioChannels;
 
@@ -292,13 +290,13 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
             initializeConnectionLatch();
 
-            //Poller线程负责IO事件分派和IO通道注册
+            //Poller线程负责Select多路复用和消费自身的事件队列
             poller = new Poller();
             Thread pollerThread = new Thread(poller, getName() + "-ClientPoller");
             pollerThread.setPriority(threadPriority);
             pollerThread.setDaemon(true);
             pollerThread.start();
-            //Acceptor线程接受客户端连接
+            //Acceptor线程接受客户端连接,发布PollerEvent到Poller的事件队列
             startAcceptorThread();
         }
     }
@@ -439,7 +437,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             }
             NioSocketWrapper socketWrapper = new NioSocketWrapper(channel, this);
             connections.put(socketWrapper, socketWrapper);
-            //NioChannel通道屏蔽SocketChannel细节
             channel.reset(socket, socketWrapper);
             socketWrapper.setReadTimeout(getConnectionTimeout());
             socketWrapper.setWriteTimeout(getConnectionTimeout());
@@ -657,7 +654,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                     pe.run();
                     pe.reset();
                     if (running && !paused && eventCache != null) {
-                        //回收PollerEvent对象
                         eventCache.push(pe);
                     }
                 } catch (Throwable x) {
@@ -685,7 +681,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             } else {
                 r.reset(socket, OP_REGISTER);
             }
-            //将IO注册事件转化为PollerEvent,提交到Poll线程的任务队列
             addEvent(r);
         }
 
@@ -798,7 +793,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                                     if (!socketWrapper.readOperation.process()) {
                                         closeSocket = true;
                                     }
-                                   //worker线程处理IO事件
+                                    //SocketProcessor线程处理Socket读事件
                                 } else if (!processSocket(socketWrapper, SocketEvent.OPEN_READ, true)) {
                                     closeSocket = true;
                                 }
@@ -1665,7 +1660,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                     if (event == null) {
                         state = getHandler().process(socketWrapper, SocketEvent.OPEN_READ);
                     } else {
-                        //处理客户端发送的Socket消息
                         state = getHandler().process(socketWrapper, event);
                     }
                     if (state == SocketState.CLOSED) {
