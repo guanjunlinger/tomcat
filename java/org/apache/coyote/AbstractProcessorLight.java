@@ -78,7 +78,7 @@ public abstract class AbstractProcessorLight implements Processor {
             }
 
             if (state != SocketState.CLOSED && isAsync()) {
-                //驱动异步状态迁移
+                //异步请求状态迁移驱动函数
                 state = asyncPostProcess();
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Socket: [" + socketWrapper +

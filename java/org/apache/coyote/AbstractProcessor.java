@@ -500,6 +500,7 @@ public abstract class AbstractProcessor extends AbstractProcessorLight implement
         case ASYNC_COMPLETE: {
             clearDispatches();
             if (asyncStateMachine.asyncComplete()) {
+                //异步请求完成,将IO事件重新封装成SocketProcessor任务
                 processSocketEvent(SocketEvent.OPEN_READ, true);
             }
             break;

@@ -195,7 +195,9 @@ final class StandardWrapperValve
                         }
                     }
                 } else {
+                    //当前请求是异步请求派遣
                     if (request.isAsyncDispatching()) {
+
                         request.getAsyncContextInternal().doInternalDispatch();
                     } else {
                         filterChain.doFilter

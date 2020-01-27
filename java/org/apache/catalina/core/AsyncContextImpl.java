@@ -366,6 +366,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             Runnable runnable = dispatch;
             dispatch = null;
             runnable.run();
+            //派遣请求不是异步请求,由容器触发fireOnComplete回调
             if (!request.isAsync()) {
                 fireOnComplete();
             }
