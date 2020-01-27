@@ -1685,7 +1685,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                 event = null;
                 //return to cache
                 if (running && !paused && processorCache != null) {
-                    //回收SocketProcessor对象
                     processorCache.push(this);
                 }
             }
