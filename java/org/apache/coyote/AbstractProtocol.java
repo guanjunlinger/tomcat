@@ -796,6 +796,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 // longer a processor associated with this socket.
                 return SocketState.CLOSED;
             }
+            //标记当前线程为容器线程
             ContainerThreadMarker.set();
 
             try {
@@ -857,7 +858,7 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
 
                 SocketState state = SocketState.CLOSED;
                 do {
-                    //通用接口,屏蔽应用层协议的区别
+                    //Processor处理请求,屏蔽应用层协议区别
                     state = processor.process(wrapper, status);
 
                     if (state == SocketState.UPGRADING) {

@@ -290,13 +290,13 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
 
             initializeConnectionLatch();
 
-            //Poller线程负责Select多路复用和消费自身的事件队列
+            //Poller线程负责IO轮询,超时处理和PollerEvent任务调度
             poller = new Poller();
             Thread pollerThread = new Thread(poller, getName() + "-ClientPoller");
             pollerThread.setPriority(threadPriority);
             pollerThread.setDaemon(true);
             pollerThread.start();
-            //Acceptor线程接受客户端连接,发布PollerEvent到Poller的事件队列
+            //Acceptor线程接受客户端连接,发布PollerEvent任务到Poller线程的任务队列
             startAcceptorThread();
         }
     }
@@ -438,6 +438,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
             NioSocketWrapper socketWrapper = new NioSocketWrapper(channel, this);
             connections.put(socketWrapper, socketWrapper);
             channel.reset(socket, socketWrapper);
+            //设置Socket读写超时
             socketWrapper.setReadTimeout(getConnectionTimeout());
             socketWrapper.setWriteTimeout(getConnectionTimeout());
             socketWrapper.setKeepAliveLeft(NioEndpoint.this.getMaxKeepAliveRequests());
@@ -723,6 +724,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                 try {
                     if (!close) {
                         hasEvents = events();
+                        //存在PollerEvent任务需要处理
                         if (wakeupCounter.getAndSet(-1) > 0) {
                             // If we are here, means we have other stuff to do
                             // Do a non blocking select
@@ -793,7 +795,6 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel, SocketChannel>
                                     if (!socketWrapper.readOperation.process()) {
                                         closeSocket = true;
                                     }
-                                    //SocketProcessor线程处理Socket读事件
                                 } else if (!processSocket(socketWrapper, SocketEvent.OPEN_READ, true)) {
                                     closeSocket = true;
                                 }
