@@ -45,7 +45,6 @@ public abstract class AbstractProcessorLight implements Processor {
         Iterator<DispatchType> dispatches = null;
         do {
             if (dispatches != null) {
-                //处理非阻塞IO事件
                 DispatchType nextDispatch = dispatches.next();
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Processing dispatch type: [" + nextDispatch + "]");
@@ -90,6 +89,7 @@ public abstract class AbstractProcessorLight implements Processor {
             if (dispatches == null || !dispatches.hasNext()) {
                 // Only returns non-null iterator if there are
                 // dispatches to process.
+                //处理Nonblock IO 分派事件
                 dispatches = getIteratorAndClearDispatches();
             }
         } while (state == SocketState.ASYNC_END ||
