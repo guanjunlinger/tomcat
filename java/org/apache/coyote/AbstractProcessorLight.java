@@ -45,6 +45,7 @@ public abstract class AbstractProcessorLight implements Processor {
         Iterator<DispatchType> dispatches = null;
         do {
             if (dispatches != null) {
+                //处理非阻塞IO事件
                 DispatchType nextDispatch = dispatches.next();
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Processing dispatch type: [" + nextDispatch + "]");
