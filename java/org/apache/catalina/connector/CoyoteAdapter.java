@@ -230,7 +230,6 @@ public class CoyoteAdapter implements Adapter {
                 connector.getService().getContainer().getPipeline().getFirst().invoke(
                         request, response);
             }
-
             if (request.isAsyncDispatching()) {
                 connector.getService().getContainer().getPipeline().getFirst().invoke(
                         request, response);
@@ -239,7 +238,7 @@ public class CoyoteAdapter implements Adapter {
                     asyncConImpl.setErrorState(t, true);
                 }
             }
-
+            //非阻塞IO complete请求
             if (!request.isAsync()) {
                 request.finishRequest();
                 response.finishResponse();
