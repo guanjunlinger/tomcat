@@ -248,6 +248,7 @@ public class InputBuffer extends Reader
         // has been finished will register the socket for read interest and that
         // is not required.
         if (!coyoteRequest.isFinished() && isReady()) {
+            //触发DispatchType.NON_BLOCKING_READ事件
             coyoteRequest.action(ActionCode.DISPATCH_READ, null);
             if (!ContainerThreadMarker.isContainerThread()) {
                 // Not on a container thread so need to execute the dispatch
@@ -302,7 +303,6 @@ public class InputBuffer extends Reader
         }
 
         AtomicBoolean result = new AtomicBoolean();
-        //数据没有准备好,则套接字重新注册读事件等待数据到达
         coyoteRequest.action(ActionCode.NB_READ_INTEREST, result);
         return result.get();
     }

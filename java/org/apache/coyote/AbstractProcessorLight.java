@@ -49,7 +49,6 @@ public abstract class AbstractProcessorLight implements Processor {
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Processing dispatch type: [" + nextDispatch + "]");
                 }
-                //分派非阻塞IO回调
                 state = dispatch(nextDispatch.getSocketStatus());
                 if (!dispatches.hasNext()) {
                     state = checkForPipelinedData(state, socketWrapper);
@@ -79,7 +78,6 @@ public abstract class AbstractProcessorLight implements Processor {
             }
 
             if (state != SocketState.CLOSED && isAsync()) {
-                //异步状态迁移驱动器
                 state = asyncPostProcess();
                 if (getLog().isDebugEnabled()) {
                     getLog().debug("Socket: [" + socketWrapper +
