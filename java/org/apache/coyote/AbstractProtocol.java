@@ -862,7 +862,6 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                 // longer a processor associated with this socket.
                 return SocketState.CLOSED;
             }
-            //标记当前线程为容器线程
             ContainerThreadMarker.set();
 
             try {

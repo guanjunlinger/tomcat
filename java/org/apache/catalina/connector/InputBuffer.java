@@ -247,7 +247,6 @@ public class InputBuffer extends Reader
         // Must call isFinished() first as a call to isReady() if the request
         // has been finished will register the socket for read interest and that
         // is not required.
-        //数据已经准备好,容器负责触发ReadListener.onDataAvailable()回调
         if (!coyoteRequest.isFinished() && isReady()) {
             coyoteRequest.action(ActionCode.DISPATCH_READ, null);
             if (!ContainerThreadMarker.isContainerThread()) {
