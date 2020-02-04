@@ -830,7 +830,6 @@ public abstract class AbstractProcessor extends AbstractProcessorLight implement
                  * once the non-container thread completes so that the first calls to
                  * onWritePossible() and/or onDataAvailable() as appropriate are made by
                  * the container.
-                 *
                  * Processing the dispatches requires (for APR/native at least)
                  * that the socket has been added to the waitingRequests queue. This may
                  * not have occurred by the time that the non-container thread completes
