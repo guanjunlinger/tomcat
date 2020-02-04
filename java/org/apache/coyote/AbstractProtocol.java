@@ -993,7 +993,6 @@ public abstract class AbstractProtocol<S> implements ProtocolHandler,
                     // socket associated with the processor. Exact requirements
                     // depend on type of long poll
                     longPoll(wrapper, processor);
-                    //异步请求添加到超时处理器检测列表
                     if (processor.isAsync()) {
                         getProtocol().addWaitingProcessor(processor);
                     }
