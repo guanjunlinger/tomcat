@@ -248,7 +248,6 @@ public class InputBuffer extends Reader
         // has been finished will register the socket for read interest and that
         // is not required.
         if (!coyoteRequest.isFinished() && isReady()) {
-            //触发DispatchType.NON_BLOCKING_READ事件
             coyoteRequest.action(ActionCode.DISPATCH_READ, null);
             if (!ContainerThreadMarker.isContainerThread()) {
                 // Not on a container thread so need to execute the dispatch
