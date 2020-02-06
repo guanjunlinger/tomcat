@@ -83,7 +83,7 @@ final class StandardWrapperValve
     /**
      * Invoke the servlet we are managing, respecting the rules regarding
      * servlet lifecycle and SingleThreadModel support.
-     *
+     * 负责组装ApplicationFilterChain,处理普通请求和异步dispatch请求
      * @param request Request to be processed
      * @param response Response to be produced
      *
@@ -195,9 +195,8 @@ final class StandardWrapperValve
                         }
                     }
                 } else {
-                    //当前请求是异步请求派遣
                     if (request.isAsyncDispatching()) {
-
+                        //执行异步请求的AsyncRunnable任务
                         request.getAsyncContextInternal().doInternalDispatch();
                     } else {
                         filterChain.doFilter
@@ -266,7 +265,6 @@ final class StandardWrapperValve
             // Deallocate the allocated servlet instance
             try {
                 if (servlet != null) {
-                    //回收Servlet实例
                     wrapper.deallocate(servlet);
                 }
             } catch (Throwable e) {

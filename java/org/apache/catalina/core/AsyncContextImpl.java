@@ -551,7 +551,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             } catch (Throwable t) {
                 ExceptionUtils.handleThrowable(t);
                 context.getLogger().error(sm.getString("asyncContextImpl.asyncRunnableError"), t);
-                //记录异步请求的错误信息
                 coyoteRequest.setAttribute(RequestDispatcher.ERROR_EXCEPTION, t);
                 org.apache.coyote.Response coyoteResponse = coyoteRequest.getResponse();
                 coyoteResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
