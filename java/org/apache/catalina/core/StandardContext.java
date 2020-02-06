@@ -4847,7 +4847,6 @@ public class StandardContext extends ContainerBase
     /**
      * Load and initialize all servlets marked "load on startup" in the
      * web application deployment descriptor.
-     * loadOnStartup值越小,优先级越高(取值必须>=0)
      * @param children Array of wrappers for all currently defined
      *  servlets (including those not declared load on startup)
      * @return <code>true</code> if load on startup was considered successful
@@ -4874,7 +4873,6 @@ public class StandardContext extends ContainerBase
         for (ArrayList<Wrapper> list : map.values()) {
             for (Wrapper wrapper : list) {
                 try {
-                    //加载并初始化Servlet实例
                     wrapper.load();
                 } catch (ServletException e) {
                     getLogger().error(sm.getString("standardContext.loadOnStartup.loadException",
