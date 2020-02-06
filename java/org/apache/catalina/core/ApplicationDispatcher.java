@@ -443,7 +443,6 @@ final class ApplicationDispatcher implements AsyncDispatcher, RequestDispatcher 
         DispatcherType disInt = (DispatcherType) request.getAttribute(Globals.DISPATCHER_TYPE_ATTR);
         if (disInt != null) {
             boolean doInvoke = true;
-            //forward请求触发ServletRequestListener监听器
             if (context.getFireRequestListenersOnForwards() &&
                     !context.fireRequestInitEvent(request)) {
                 doInvoke = false;

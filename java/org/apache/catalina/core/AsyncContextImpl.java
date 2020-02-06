@@ -366,7 +366,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             Runnable runnable = dispatch;
             dispatch = null;
             runnable.run();
-            //派遣请求不是异步请求,由容器触发fireOnComplete回调
             if (!request.isAsync()) {
                 fireOnComplete();
             }
@@ -584,6 +583,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
 
         @Override
         public void run() {
+            //设置异步状态机state=AsyncState.DISPATCHED
             request.getCoyoteRequest().action(ActionCode.ASYNC_DISPATCHED, null);
             try {
                 applicationDispatcher.dispatch(servletRequest, servletResponse);
