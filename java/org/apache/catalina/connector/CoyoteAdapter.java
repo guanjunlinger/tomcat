@@ -238,7 +238,6 @@ public class CoyoteAdapter implements Adapter {
                     asyncConImpl.setErrorState(t, true);
                 }
             }
-            //非阻塞IO complete请求
             if (!request.isAsync()) {
                 request.finishRequest();
                 response.finishResponse();
