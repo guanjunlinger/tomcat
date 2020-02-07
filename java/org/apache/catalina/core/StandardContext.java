@@ -139,11 +139,12 @@ import org.apache.tomcat.util.security.PrivilegedSetTccl;
  * Standard implementation of the <b>Context</b> interface.  Each
  * child container must be a Wrapper implementation to process the
  * requests directed to a particular servlet.
- *  1.Tomcat内部web应用执行环境
- *  2.维护和管理Servlet集合
- *  3.维护和管理Filter集合
- *  4.维护和管理applicationLifecycleListeners(HttpSessionListener和ServletContextListener接口)
- *  5.维护和管理applicationEventListeners
+ *  1.web application执行环境
+ *  2.维护和管理StandardWrapper子容器映射
+ *  3.维护和管理ApplicationFilterConfig映射
+ *  4.维护和管理applicationLifecycleListener列表(HttpSessionListener和ServletContextListener接口)
+ *  5.维护和管理applicationEventListener列表
+ *  6.利用ErrorPageSupport帮助类管理ErrorPage映射
  *
  * @author Craig R. McClanahan
  * @author Remy Maucherat
