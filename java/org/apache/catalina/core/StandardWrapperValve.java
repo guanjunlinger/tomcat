@@ -83,9 +83,7 @@ final class StandardWrapperValve
     /**
      * Invoke the servlet we are managing, respecting the rules regarding
      * servlet lifecycle and SingleThreadModel support.
-     * 组装ApplicationFilterChain拦截普通请求
-     * 执行异步dispatch任务
-     * 捕获所有异常信息,用于容器的异常处理机制
+     * 引入FilterChain拦截HTTP请求
      * @param request Request to be processed
      * @param response Response to be produced
      *
