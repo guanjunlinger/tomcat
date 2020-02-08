@@ -163,6 +163,7 @@ final class StandardHostValve extends ValveBase {
             }
 
             // Look for (and render if found) an application level error page
+            // 应用级别的ErrorPage机制
             if (response.isErrorReportRequired()) {
                 // If an error has occurred that prevents further I/O, don't waste time
                 // producing an error report that will never be read
