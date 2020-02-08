@@ -114,7 +114,7 @@ import org.xml.sax.SAXParseException;
 /**
  * Startup event listener for a <b>Context</b> that configures the properties
  * of that Context, and the associated defined servlets.
- *
+ * 负责解析Context的所有配置信息
  * @author Craig R. McClanahan
  */
 public class ContextConfig implements LifecycleListener {
@@ -1107,7 +1107,7 @@ public class ContextConfig implements LifecycleListener {
 
         Set<WebXml> defaults = new HashSet<>();
         defaults.add(getDefaultWebXmlFragment(webXmlParser));
-
+        //应用全局的web.xml,默认注册DefaultServlet和JspServlet组件提供服务
         Set<WebXml> tomcatWebXml = new HashSet<>();
         tomcatWebXml.add(getTomcatWebXmlFragment(webXmlParser));
 
