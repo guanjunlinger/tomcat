@@ -357,7 +357,7 @@ final class StandardHostValve extends ValveBase {
      * that are to be forwarded to this page.  Return <code>true</code> if
      * we successfully utilized the specified error page location, or
      * <code>false</code> if the default error report should be rendered.
-     *
+     * 将异常请求转发给ErrorPage配置的目标Servlet
      * @param request The request being processed
      * @param response The response being generated
      * @param errorPage The errorPage directive we are obeying

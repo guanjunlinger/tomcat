@@ -145,6 +145,7 @@ import org.apache.tomcat.util.security.PrivilegedSetTccl;
  *  4.维护和管理applicationLifecycleListener列表(HttpSessionListener和ServletContextListener接口)
  *  5.维护和管理applicationEventListener列表
  *  6.利用ErrorPageSupport帮助类管理ErrorPage映射
+ *  7.维护和管理welcome file列表
  *
  * @author Craig R. McClanahan
  * @author Remy Maucherat
