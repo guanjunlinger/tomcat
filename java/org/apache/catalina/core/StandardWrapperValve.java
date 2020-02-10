@@ -84,7 +84,8 @@ final class StandardWrapperValve
      * Invoke the servlet we are managing, respecting the rules regarding
      * servlet lifecycle and SingleThreadModel support.
      * 引入FilterChain拦截HTTP请求
-     * catch所有的异常类型,保存到request属性中,设置response的状态码为500
+     * catch所有的异常类型,暴露异常信息到请求属性中
+     * 若发生异常,则设置response的状态码为500,errorState=1
      * @param request Request to be processed
      * @param response Response to be produced
      *
