@@ -614,8 +614,9 @@ final class ApplicationDispatcher implements AsyncDispatcher, RequestDispatcher 
 
         ApplicationHttpRequest wrequest = (ApplicationHttpRequest) wrapRequest(state);
         HttpServletRequest hrequest = state.hrequest;
-
+        //暴露DispatcherType到请求属性
         wrequest.setAttribute(Globals.DISPATCHER_TYPE_ATTR, DispatcherType.ASYNC);
+        //暴露Dispatch Path到请求属性
         wrequest.setAttribute(Globals.DISPATCHER_REQUEST_PATH_ATTR, getCombinedPath());
         wrequest.setAttribute(AsyncContext.ASYNC_MAPPING, hrequest.getHttpServletMapping());
 

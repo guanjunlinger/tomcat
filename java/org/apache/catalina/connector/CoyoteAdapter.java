@@ -624,6 +624,7 @@ public class CoyoteAdapter implements Adapter {
             // Parse the path parameters. This will:
             //   - strip out the path parameters
             //   - convert the decodedURI to bytes
+            //解析路径参数到HttpServletRequest的路径参数Map中
             parsePathParameters(req, request);
 
             // URI decoding

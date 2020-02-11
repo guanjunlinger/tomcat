@@ -193,6 +193,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
                         sm.getString("asyncContextImpl.dispatchingStarted"));
             }
             if (request.getAttribute(ASYNC_REQUEST_URI) == null) {
+                //暴露异步请求的Path信息到请求属性
                 request.setAttribute(ASYNC_REQUEST_URI, request.getRequestURI());
                 request.setAttribute(ASYNC_CONTEXT_PATH, request.getContextPath());
                 request.setAttribute(ASYNC_SERVLET_PATH, request.getServletPath());
@@ -213,7 +214,6 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             // request/response and that in turn may trigger recycling of this
             // object before the in-progress count can be decremented
             final Context context = this.context;
-            //为容器线程准备dispatch任务
             this.dispatch = new AsyncRunnable(
                     request, applicationDispatcher, servletRequest, servletResponse);
             this.request.getCoyoteRequest().action(ActionCode.ASYNC_DISPATCH, null);
