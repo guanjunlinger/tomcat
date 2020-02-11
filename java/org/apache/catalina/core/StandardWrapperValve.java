@@ -198,7 +198,6 @@ final class StandardWrapperValve
                     }
                 } else {
                     if (request.isAsyncDispatching()) {
-                        //执行异步请求的AsyncRunnable任务
                         request.getAsyncContextInternal().doInternalDispatch();
                     } else {
                         filterChain.doFilter

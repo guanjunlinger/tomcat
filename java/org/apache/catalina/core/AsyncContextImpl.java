@@ -216,6 +216,7 @@ public class AsyncContextImpl implements AsyncContext, AsyncContextCallback {
             final Context context = this.context;
             this.dispatch = new AsyncRunnable(
                     request, applicationDispatcher, servletRequest, servletResponse);
+            //重新提交SocketProcessor任务到容器线程
             this.request.getCoyoteRequest().action(ActionCode.ASYNC_DISPATCH, null);
             clearServletRequestResponse();
             context.decrementInProgressAsyncCount();
