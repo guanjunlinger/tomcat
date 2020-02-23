@@ -688,7 +688,6 @@ public class Tomcat {
         LifecycleListener listener = null;
         try {
             Class<?> clazz = Class.forName(getHost().getConfigClass());
-            //注册LifecycleListener监听器类ContextConfig,解析应用配置信息
             listener = (LifecycleListener) clazz.getConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
             // Wrap in IAE since we can't easily change the method signature to
@@ -716,7 +715,6 @@ public class Tomcat {
         Context ctx = createContext(host, contextPath);
         ctx.setPath(contextPath);
         ctx.setDocBase(docBase);
-        //DefaultWebXmlListener注册默认的Servlet实现类
         if (addDefaultWebXmlToWebapp)
             ctx.addLifecycleListener(getDefaultWebXmlListener());
 
